@@ -29,10 +29,10 @@
 	<mongo:mapping-converter id="mongoDbConverter">
 		<mongo:custom-converters>
 			<!--  <mongo:converter>
-				<bean class="com.digitalchocolate.socailbetting.utils.StringToLongConverter" />
+				<bean class="com.openbet.socailbetting.utils.StringToLongConverter" />
 			</mongo:converter> -->
 			<mongo:converter>
-				<bean class="com.digitalchocolate.socailbetting.utils.LongToIntegerConverter" />
+				<bean class="com.openbet.socailbetting.utils.LongToIntegerConverter" />
 			</mongo:converter>
 		</mongo:custom-converters>
 	</mongo:mapping-converter>

@@ -1,0 +1,192 @@
+package com.openbet.socailbetting.model;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Version;
+
+import com.openbet.socailbetting.utils.BetTypeEnum;
+import com.openbet.socailbetting.utils.StatusEnum;
+import com.openbet.socailbetting.utils.TimerStatusEnum;
+
+
+@Document
+public class BettingEvent extends TransactionalModel implements Serializable {
+	private static final long serialVersionUID = 2936485450643865624L;
+	private static final String dayFormat ="yyyyMMdd";
+	@Id	
+	private String id;
+	private Long projectId;
+	private List<BettingTarget> targets;
+	private List<BettingOpponent> opponents;
+	private List<Friend> friends;
+	private List<String> notifiedOpponentIds = new ArrayList<String>();
+	private Integer requiredNumOpponents;
+	private StatusEnum status = StatusEnum.NEW;
+	private TimerStatusEnum timerStatus;
+	private Boolean userAllowedTOSelectOpponentCriteria;
+	private Boolean readyForSettlement;
+	private Integer level; // is tier
+	private List<Integer> expectedLevels; // willing to bet with
+	private Double takeOutPercentage;
+	private String winnerId;
+	private BetTypeEnum betType;
+	private Date createdDate = new Date();
+	private Date matchedDate;
+	private Date settledDate;
+	private String currency;
+	private boolean isTie;
+	private Integer day=Integer.valueOf(new SimpleDateFormat(dayFormat).format(new Date()));
+	@Version
+	private volatile int version;
+
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public List<BettingTarget> getTargets() {
+		return targets;
+	}
+	public void setTargets(List<BettingTarget> targets) {
+		this.targets = targets;
+	}
+	public List<BettingOpponent> getOpponents() {
+		return opponents;
+	}
+	public void setOpponents(List<BettingOpponent> opponents) {
+		this.opponents = opponents;
+	}
+	public List<Friend> getFriends() {
+		return friends;
+	}
+	public void setFriends(List<Friend> friends) {
+		this.friends = friends;
+	}
+	public Integer getRequiredNumOpponents() {
+		return requiredNumOpponents;
+	}
+	public void setRequiredNumOpponents(Integer requiredNumOpponents) {
+		this.requiredNumOpponents = requiredNumOpponents;
+	}
+	public StatusEnum getStatus() {
+		return status;
+	}
+	public void setStatus(StatusEnum status) {
+		this.status = status;
+	}
+	public Boolean getUserAllowedTOSelectOpponentCriteria() {
+		return userAllowedTOSelectOpponentCriteria;
+	}
+	public void setUserAllowedTOSelectOpponentCriteria(
+			Boolean userAllowedTOSelectOpponentCriteria) {
+		this.userAllowedTOSelectOpponentCriteria = userAllowedTOSelectOpponentCriteria;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+	public List<Integer> getExpectedLevels() {
+		return expectedLevels;
+	}
+	public void setExpectedLevels(List<Integer> expectedLevels) {
+		this.expectedLevels = expectedLevels;
+	}
+	public Double getTakeOutPercentage() {
+		return takeOutPercentage;
+	}
+	public void setTakeOutPercentage(Double takeOutPercentage) {
+		this.takeOutPercentage = takeOutPercentage;
+	}
+	public String getWinnerId() {
+		return winnerId;
+	}
+	public void setWinnerId(String winnerId) {
+		this.winnerId = winnerId;
+	}
+	
+	public BetTypeEnum getBetType() {
+		return betType;
+	}
+	public void setBetType(BetTypeEnum betType) {
+		this.betType = betType;
+	}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	public TimerStatusEnum getTimerStatus() {
+		return timerStatus;
+	}
+	public void setTimerStatus(TimerStatusEnum timerStatus) {
+		this.timerStatus = timerStatus;
+	}
+	public Boolean getReadyForSettlement() {
+		return readyForSettlement;
+	}
+	public void setReadyForSettlement(Boolean readyForSettlement) {
+		this.readyForSettlement = readyForSettlement;
+	}
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	public Date getMatchedDate() {
+		return matchedDate;
+	}
+	public void setMatchedDate(Date matchedDate) {
+		this.matchedDate = matchedDate;
+	}
+	public Date getSettledDate() {
+		return settledDate;
+	}
+	public void setSettledDate(Date settledDate) {
+		this.settledDate = settledDate;
+	}
+	public List<String> getNotifiedOpponentIds() {
+		return notifiedOpponentIds;
+	}
+	public void setNotifiedOpponentIds(List<String> notifiedOpponentIds) {
+		this.notifiedOpponentIds = notifiedOpponentIds;
+	}
+	public int getVersion() {
+		return version;
+	}
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	public boolean isTie() {
+		return isTie;
+	}
+	public void setTie(boolean isTie) {
+		this.isTie = isTie;
+	}
+	public Integer getDay() {
+		return day;
+	}
+	public void setDay(Integer day) {
+		this.day = day;
+	}
+	
+}

@@ -169,7 +169,7 @@
             <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />
         </amq:shutdownHooks> -->
         <amq:shutdownHooks>
-        	<bean xmlns="http://www.springframework.org/schema/beans" id="brokerShutdown" class="com.digitalchocolate.socailbetting.service.impl.BrokerShutdownHookImpl" />
+        	<bean xmlns="http://www.springframework.org/schema/beans" id="brokerShutdown" class="com.openbet.socailbetting.service.impl.BrokerShutdownHookImpl" />
         </amq:shutdownHooks>
 		<amq:plugins>
         <amq:simpleAuthenticationPlugin>

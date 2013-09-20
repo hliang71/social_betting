@@ -15,57 +15,57 @@
     <context:annotation-config/>
 
     <!-- Activates scanning of @Repository and @Service -->
-    <context:component-scan base-package="com.digitalchocolate.socailbetting.engine"/> 
+    <context:component-scan base-package="com.openbet.socailbetting.engine"/> 
 
     <!-- Add new DAOs here -->
 
     <!-- Add new Beans here -->
-    <bean id="opponentSearchExpireListen" class="com.digitalchocolate.socailbetting.executor.listener.OpponentSearchExpireLisener"/>
+    <bean id="opponentSearchExpireListen" class="com.openbet.socailbetting.executor.listener.OpponentSearchExpireLisener"/>
     
-    <bean id="defaultStartOpponentTimerCommand" class="com.digitalchocolate.socailbetting.executor.DefaultStartOpponentTimerCommand" init-method="init" depends-on="redisTemplate" lazy-init="false">
+    <bean id="defaultStartOpponentTimerCommand" class="com.openbet.socailbetting.executor.DefaultStartOpponentTimerCommand" init-method="init" depends-on="redisTemplate" lazy-init="false">
     	<property name="opponentListener" ref="opponentSearchExpireListen"/>
     </bean>
     
-    <bean id="defaultAddOpponentTargetCommand" class="com.digitalchocolate.socailbetting.executor.DefaultAddOpponentTargetCommand">
+    <bean id="defaultAddOpponentTargetCommand" class="com.openbet.socailbetting.executor.DefaultAddOpponentTargetCommand">
     	<property name="ruleDao" ref="ruleDao"/>
     </bean>
     
-    <bean id="defaultAddFriendCommand" class="com.digitalchocolate.socailbetting.executor.DefaultAddFriendCommand"/>
+    <bean id="defaultAddFriendCommand" class="com.openbet.socailbetting.executor.DefaultAddFriendCommand"/>
    
-    <bean id="defaultSetExpectedLevelCommand" class="com.digitalchocolate.socailbetting.executor.DefaultSetExpectedLevelCommand"/>
+    <bean id="defaultSetExpectedLevelCommand" class="com.openbet.socailbetting.executor.DefaultSetExpectedLevelCommand"/>
     
-    <bean id="defaultValidateOpponentCommand" class="com.digitalchocolate.socailbetting.executor.DefaultValidateOpponentCommand" />
+    <bean id="defaultValidateOpponentCommand" class="com.openbet.socailbetting.executor.DefaultValidateOpponentCommand" />
     
-    <bean id="defaultCalculateOddsCommand" class="com.digitalchocolate.socailbetting.executor.DefaultCalculateOddsCommand"  />
+    <bean id="defaultCalculateOddsCommand" class="com.openbet.socailbetting.executor.DefaultCalculateOddsCommand"  />
     
-    <bean id="defaultValidateMinBetCommand" class="com.digitalchocolate.socailbetting.executor.DefaultValidateMinBetCommand" />
+    <bean id="defaultValidateMinBetCommand" class="com.openbet.socailbetting.executor.DefaultValidateMinBetCommand" />
     
-    <bean id="defaultValidateMaxBetCommand" class="com.digitalchocolate.socailbetting.executor.DefaultValidateMaxBetCommand" />
+    <bean id="defaultValidateMaxBetCommand" class="com.openbet.socailbetting.executor.DefaultValidateMaxBetCommand" />
     
-    <bean id="defaultStartCompletionTimerCommand" class="com.digitalchocolate.socailbetting.executor.DefaultStartCompletionTimerCommand" init-method="init" depends-on="redisTemplate" lazy-init="false">
+    <bean id="defaultStartCompletionTimerCommand" class="com.openbet.socailbetting.executor.DefaultStartCompletionTimerCommand" init-method="init" depends-on="redisTemplate" lazy-init="false">
     	<property name="completionListener" ref="completionExpireListen"/>
     </bean>
     
-    <bean id="defaultCallbackCommand" class="com.digitalchocolate.socailbetting.executor.DefaultCallbackCommand" >
+    <bean id="defaultCallbackCommand" class="com.openbet.socailbetting.executor.DefaultCallbackCommand" >
     	<property name="restTemplate" ref="restTemplate"/>
     </bean>
-    <bean id="completionExpireListen" class="com.digitalchocolate.socailbetting.executor.listener.CompletionExpireLisener"/>
+    <bean id="completionExpireListen" class="com.openbet.socailbetting.executor.listener.CompletionExpireLisener"/>
     
-    <bean id="defaultStartEvaluationCommand" class="com.digitalchocolate.socailbetting.executor.DefaultStartEvaluationCommand" />
+    <bean id="defaultStartEvaluationCommand" class="com.openbet.socailbetting.executor.DefaultStartEvaluationCommand" />
     
-    <bean id="defaultValidateAllOpponentsCompletedCommand" class="com.digitalchocolate.socailbetting.executor.DefaultValidateAllOpponentsCompletedCommand" /> 
+    <bean id="defaultValidateAllOpponentsCompletedCommand" class="com.openbet.socailbetting.executor.DefaultValidateAllOpponentsCompletedCommand" /> 
     
-    <bean id="defaultSettlementRuleExecutionCommand" class="com.digitalchocolate.socailbetting.executor.DefaultSettlementRuleExecutionCommand" />
+    <bean id="defaultSettlementRuleExecutionCommand" class="com.openbet.socailbetting.executor.DefaultSettlementRuleExecutionCommand" />
            
-    <bean id="defaultLowestValueWinExecutionCommand" class="com.digitalchocolate.socailbetting.executor.DefaultLowestValueWinExecutionCommand" />
+    <bean id="defaultLowestValueWinExecutionCommand" class="com.openbet.socailbetting.executor.DefaultLowestValueWinExecutionCommand" />
      
-    <bean id="defaultHighestValueWinExecutionCommand" class="com.digitalchocolate.socailbetting.executor.DefaultHighestValueWinExecutionCommand" />     
+    <bean id="defaultHighestValueWinExecutionCommand" class="com.openbet.socailbetting.executor.DefaultHighestValueWinExecutionCommand" />     
 
-    <bean id="playerLevelHighValidator" class="com.digitalchocolate.socailbetting.executor.PlayerLevelHighValidator" />   
+    <bean id="playerLevelHighValidator" class="com.openbet.socailbetting.executor.PlayerLevelHighValidator" />   
     
-    <bean id="playerLevelLowValidator" class="com.digitalchocolate.socailbetting.executor.PlayerLevelLowValidator" />  
+    <bean id="playerLevelLowValidator" class="com.openbet.socailbetting.executor.PlayerLevelLowValidator" />  
         
-    <bean id="playerLevelEqualValidator" class="com.digitalchocolate.socailbetting.executor.PlayerLevelEqualValidator" />     
+    <bean id="playerLevelEqualValidator" class="com.openbet.socailbetting.executor.PlayerLevelEqualValidator" />     
        
       
 

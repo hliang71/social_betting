@@ -9,6 +9,6 @@
     <context:annotation-config/>
 
     <!-- Activates scanning of @Repository -->
-    <context:component-scan base-package="com.digitalchocolate.socailbetting.dao"/>
+    <context:component-scan base-package="com.openbet.socailbetting.dao"/>
 
 </beans>

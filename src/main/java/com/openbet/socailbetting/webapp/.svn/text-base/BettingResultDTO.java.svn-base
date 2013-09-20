@@ -1,0 +1,13 @@
+package com.openbet.socailbetting.webapp;
+
+public class BettingResultDTO extends ResponseResultDTO{
+	
+	private String eventId;
+	
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+}

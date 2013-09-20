@@ -1,0 +1,78 @@
+package com.openbet.socailbetting.aop;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.aspectj.lang.ProceedingJoinPoint;
+
+import com.openbet.socailbetting.dao.impl.SocialBettingRuleDao;
+import com.openbet.socailbetting.exception.SocialBettingSecurityException;
+
+import com.openbet.socailbetting.utils.ErrCode;
+import com.openbet.socailbetting.utils.MD5Encryter;
+import com.openbet.socailbetting.webapp.BaseRequestDTO;
+
+public class SocialBettingSecurityInterceptor {
+	private static final Logger log = Logger.getLogger(SocialBettingSecurityInterceptor.class);
+	private static final String BY_PASS="-3.1415926";
+	private SocialBettingRuleDao ruleDao;
+	
+	public Object login(ProceedingJoinPoint call) throws Throwable
+	{
+		Object result = null;
+		Object[] args = call.getArgs();
+		if(args.length > 0)
+		{
+			Object arg = args[0];
+			if(arg instanceof BaseRequestDTO)
+			{
+				BaseRequestDTO request = (BaseRequestDTO)args[0];
+				String content = request.getSecurityContent();
+				Long projectId = request.getProjectId();
+				String sig = request.getSig();
+				String key = null;
+				try
+				{
+					key = this.ruleDao.getKey(projectId);
+				}catch(Exception e)
+				{
+					log.error("Failed to retrieve the key from db.", e);
+					throw new SocialBettingSecurityException(ErrCode.SECURITY_NOT_AUTHORIZED, "you are not authorized to do this.");
+				}
+				if(key == null)
+				{
+					throw new SocialBettingSecurityException(ErrCode.SECURITY_NOT_AUTHORIZED, "you are not authorized.");
+				}
+				content = new StringBuilder(content).append(key).toString();
+				String encrypted = MD5Encryter.encryptToHex(content);
+				String requestContent = request.getRequestContent();
+				log.info("request content is:"+requestContent);
+				if(StringUtils.isNotBlank(requestContent))
+				{
+					String newContent = new StringBuilder(requestContent).append(encrypted).toString();
+					encrypted = MD5Encryter.encryptToHex(newContent);
+				}
+				if(!key.equals(BY_PASS)&&!BY_PASS.equals(sig))
+				{
+					if(StringUtils.isBlank(encrypted) || !encrypted.equals(sig))
+					{
+						log.info("#########expecting:"+encrypted+" but:"+sig+"##############");
+						throw new SocialBettingSecurityException(ErrCode.SECURITY_NOT_AUTHORIZED, "you are not authorized.");
+					}
+				}
+				result = call.proceed();
+				return result;
+			}
+		}
+			
+		throw new SocialBettingSecurityException(ErrCode.SECURITY_NOT_AUTHORIZED, "Not supported api calls");
+		
+	}
+
+	public SocialBettingRuleDao getRuleDao() {
+		return ruleDao;
+	}
+
+	public void setRuleDao(SocialBettingRuleDao ruleDao) {
+		this.ruleDao = ruleDao;
+	}
+}

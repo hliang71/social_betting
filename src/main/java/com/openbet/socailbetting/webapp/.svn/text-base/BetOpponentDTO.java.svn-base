@@ -1,0 +1,61 @@
+package com.openbet.socailbetting.webapp;
+
+public class BetOpponentDTO {
+	private Boolean isWinner;
+	private String id;
+	private Double betAmt;
+	private String currency;
+	private Double odds;
+	private Integer level;
+	private String eventId;
+	private Double payOut;
+	public Boolean getIsWinner() {
+		return isWinner;
+	}
+	public void setIsWinner(Boolean isWinner) {
+		this.isWinner = isWinner;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public Double getBetAmt() {
+		return betAmt;
+	}
+	public void setBetAmt(Double betAmt) {
+		this.betAmt = betAmt;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	public Double getOdds() {
+		return odds;
+	}
+	public void setOdds(Double odds) {
+		this.odds = odds;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+	public Double getPayOut() {
+		return payOut;
+	}
+	public void setPayOut(Double payOut) {
+		this.payOut = payOut;
+	}
+	
+}

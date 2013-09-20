@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/dao
+END
+AbstractBaseDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/dao/AbstractBaseDao.java
+END
+BaseRuleDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/dao/BaseRuleDao.java
+END
+BaseDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/dao/BaseDao.java
+END

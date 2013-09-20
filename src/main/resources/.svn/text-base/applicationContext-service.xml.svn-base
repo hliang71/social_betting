@@ -18,12 +18,12 @@
    <aop:config>		
 		<aop:aspect ref="sbSecurityAspect">
 			<aop:pointcut id="login"
-				expression="(execution(* com.digitalchocolate.socailbetting.service.impl.*ServiceImpl.*(..)))" />
+				expression="(execution(* com.openbet.socailbetting.service.impl.*ServiceImpl.*(..)))" />
 		    <aop:around pointcut-ref="login" method="login" />
 		</aop:aspect>
 	</aop:config>
     
-    <bean id="sbSecurityAspect" class="com.digitalchocolate.socailbetting.aop.SocialBettingSecurityInterceptor" >
+    <bean id="sbSecurityAspect" class="com.openbet.socailbetting.aop.SocialBettingSecurityInterceptor" >
     	<property name="ruleDao" ref="ruleDao" />
     </bean> 
     <!-- Enable @Transactional support -->
@@ -36,8 +36,8 @@
     <context:annotation-config/>
 
     <!-- Activates scanning of @Service -->
-    <context:component-scan base-package="com.digitalchocolate.socailbetting.service"/>
-    <bean id="crmClient" class="com.digitalchocolate.socailbetting.service.impl.RestCRMClient">
+    <context:component-scan base-package="com.openbet.socailbetting.service"/>
+    <bean id="crmClient" class="com.openbet.socailbetting.service.impl.RestCRMClient">
         <property name="restTemplate" ref="restTemplate"/>
     </bean>
     
@@ -84,9 +84,9 @@
     <bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
         <property name="classesToBeBound">
             <list>
-                <value>com.digitalchocolate.socailbetting.model.CustomizerType</value>
-                <value>com.digitalchocolate.socailbetting.model.ContentType</value>
-                <value>com.digitalchocolate.socailbetting.model.TierType</value>
+                <value>com.openbet.socailbetting.model.CustomizerType</value>
+                <value>com.openbet.socailbetting.model.ContentType</value>
+                <value>com.openbet.socailbetting.model.TierType</value>
             </list>
         </property>
     </bean>
@@ -100,11 +100,11 @@
 	
 	
 	
-	<bean id="updateShardTask" class="com.digitalchocolate.socailbetting.cron.job.UpdateShardTaskImpl" >
+	<bean id="updateShardTask" class="com.openbet.socailbetting.cron.job.UpdateShardTaskImpl" >
 		<property name="ruleDao" ref="ruleDao"/>
 	</bean>   
 	<bean name="updateShardJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-	  <property name="jobClass" value="com.digitalchocolate.socailbetting.cron.job.UpdateShardJob" />
+	  <property name="jobClass" value="com.openbet.socailbetting.cron.job.UpdateShardJob" />
 	  
 	  <property name="jobDataAsMap">
 	    <map>
@@ -122,11 +122,11 @@
 	   <!--  <property name="cronExpression" value="0 0 6 * * ?" /> -->
 	</bean>
 	    
-	<bean id="runCallbackTask" class="com.digitalchocolate.socailbetting.cron.job.BetNotificationTask" >
+	<bean id="runCallbackTask" class="com.openbet.socailbetting.cron.job.BetNotificationTask" >
 		<property name="ruleDao" ref="ruleDao"/>
 	</bean>   
 	<bean name="betNotificationJob0" class="org.springframework.scheduling.quartz.JobDetailBean">
-	  <property name="jobClass" value="com.digitalchocolate.socailbetting.cron.job.BetNotificationJob" />
+	  <property name="jobClass" value="com.openbet.socailbetting.cron.job.BetNotificationJob" />
 	  
 	  <property name="jobDataAsMap">
 	    <map>
@@ -139,7 +139,7 @@
 	  </property>	  
 	</bean>	
 	<bean name="betNotificationJob1" class="org.springframework.scheduling.quartz.JobDetailBean">
-	  <property name="jobClass" value="com.digitalchocolate.socailbetting.cron.job.BetNotificationJob" />
+	  <property name="jobClass" value="com.openbet.socailbetting.cron.job.BetNotificationJob" />
 	  
 	  <property name="jobDataAsMap">
 	    <map>
@@ -181,16 +181,16 @@
 	        </list>
 	    </property> 
 	</bean>
-	<bean id="callbackSchedulerListener" class="com.digitalchocolate.socailbetting.cron.NotificationJobSchedulerListener">
-		<property name="clazName" value="com.digitalchocolate.socailbetting.cron.job.BetNotificationJob" />
+	<bean id="callbackSchedulerListener" class="com.openbet.socailbetting.cron.NotificationJobSchedulerListener">
+		<property name="clazName" value="com.openbet.socailbetting.cron.job.BetNotificationJob" />
 		<property name="lockFacade" ref="dbLockFacade" />
 	</bean>    
-	<bean id="updateSchedulerListener" class="com.digitalchocolate.socailbetting.cron.NotificationJobSchedulerListener">
-		<property name="clazName" value="com.digitalchocolate.socailbetting.cron.job.UpdateShardJob" />
+	<bean id="updateSchedulerListener" class="com.openbet.socailbetting.cron.NotificationJobSchedulerListener">
+		<property name="clazName" value="com.openbet.socailbetting.cron.job.UpdateShardJob" />
 		<property name="lockFacade" ref="dbLockFacade" />
 	</bean>   
 	
-	<bean id="dbLockFacade" class="com.digitalchocolate.socailbetting.cron.DBLockFacadeImpl" >
+	<bean id="dbLockFacade" class="com.openbet.socailbetting.cron.DBLockFacadeImpl" >
 		<property name="ruleDao" ref="ruleDao"/>
 	</bean> 
 </beans>

@@ -1,0 +1,57 @@
+package com.openbet.socailbetting.webapp;
+
+import com.openbet.socailbetting.utils.BetTypeEnum;
+
+public class SearchRequestBean extends BaseRequestDTO{
+	public static final Integer BEGIN=0;
+	
+	private Boolean friendEnable;
+	
+	private BetTypeEnum betType;
+	private Integer limit;
+	private Integer playerLevel;
+	private Integer begin;
+	
+	public Boolean getFriendEnable() {
+		return friendEnable;
+	}
+	public void setFriendEnable(Boolean friendEnable) {
+		this.friendEnable = friendEnable;
+	}
+	
+	public BetTypeEnum getBetType() {
+		return betType;
+	}
+	public void setBetType(BetTypeEnum betType) {
+		this.betType = betType;
+	}
+	public Integer getLimit() {
+		return limit;
+	}
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
+	public Integer getPlayerLevel() {
+		return playerLevel;
+	}
+	public void setPlayerLevel(Integer playerLevel) {
+		this.playerLevel = playerLevel;
+	}	
+	public Integer getBegin() {
+		return begin;
+	}
+	public void setBegin(Integer begin) {
+		this.begin = begin;
+	}
+	@Override
+	public String getRequestContent() {
+		// betType, friendEnable, limit, playerLevel
+		String beginStr = (this.begin == null)? "" : String.valueOf(this.begin);
+		String bType = (betType == null)? "" : betType.value();
+		String fe = (friendEnable == null) ? "" : friendEnable.toString();
+		String lm = (limit == null) ? "" : limit.toString();	
+		String pl = (playerLevel == null)? "" : playerLevel.toString();		
+		return new StringBuilder(beginStr).append(bType).append(fe).append(lm).append(super.getOpponentId()).append(super.getPlatformUserId()).append(pl).append(super.getProjectId()).toString();
+	}
+	
+}

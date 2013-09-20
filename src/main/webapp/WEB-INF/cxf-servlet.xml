@@ -59,9 +59,9 @@
         </jaxrs:extensionMappings>
     </jaxrs:server>
     <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/>
-    <bean id="validationExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingValidationExceptionMapper" />
-    <bean id="internalErrorExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingInternalExceptionMapper"/>
-    <bean id="sbWebApplicationExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingWebapplicationExceptionMapper">
+    <bean id="validationExceptionMapper" class="com.openbet.socailbetting.exception.SocialBettingValidationExceptionMapper" />
+    <bean id="internalErrorExceptionMapper" class="com.openbet.socailbetting.exception.SocialBettingInternalExceptionMapper"/>
+    <bean id="sbWebApplicationExceptionMapper" class="com.openbet.socailbetting.exception.SocialBettingWebapplicationExceptionMapper">
     </bean>
-    <bean id="securityExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingSecurityExceptionMapper"/>   
+    <bean id="securityExceptionMapper" class="com.openbet.socailbetting.exception.SocialBettingSecurityExceptionMapper"/>   
 </beans>

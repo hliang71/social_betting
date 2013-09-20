@@ -1,0 +1,65 @@
+package com.openbet.socailbetting.executor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import com.openbet.socailbetting.exception.RuleEngineException;
+import com.openbet.socailbetting.model.BettingEvent;
+import com.openbet.socailbetting.utils.ErrCode;
+import com.openbet.socailbetting.utils.LevelEnum;
+
+public class DefaultSetExpectedLevelCommand extends BaseRuleExecutor {
+	private static final Logger log = Logger.getLogger(DefaultSetExpectedLevelCommand.class);
+    private static final String SELECTED_LEVEL="selectedLevel";
+    private static final String PLAYER_LEVEL="playerLevel";
+	@Override
+	public BettingEvent execute(BettingEvent event, Object parameters) {
+		
+		Map<String, Object> param = (Map<String, Object>) parameters;
+		List<LevelEnum> selectedLevels =  (List<LevelEnum>) param.get(SELECTED_LEVEL);
+		Integer playerLevel = (Integer) param.get(PLAYER_LEVEL);
+		if(selectedLevels == null || selectedLevels.isEmpty())
+		{
+			throw new RuleEngineException(ErrCode.MISSING_PLAYER_SELECTED_LEVELS, "failed to set expected level of the event, missing selected levels");	
+		}
+		
+		if(playerLevel == null)
+		{
+			throw new RuleEngineException(ErrCode.MISSING_PLAYER_LEVEL, "failed to set expected level of the event, missing player tier number");	
+		}
+		event.setLevel(playerLevel);
+		List<Integer> expectedLevels = event.getExpectedLevels();
+		if(expectedLevels == null)
+		{
+			expectedLevels = new ArrayList<Integer>();
+			event.setExpectedLevels(expectedLevels);
+		}
+		for(LevelEnum level : selectedLevels)
+		{
+			if(log.isDebugEnabled()) log.debug("selected level is "+level);
+			if(level == null)
+			{
+				throw new RuleEngineException(ErrCode.MISSING_PLAYER_SELECTED_LEVELS, "selectedLevel should be \"HIGHER\",\"LOWER\" or \"EQUAL\"");
+			}
+			if(level == LevelEnum.EQUAL)
+			{
+				expectedLevels.add(playerLevel);
+			}else if(level == LevelEnum.HIGHER)
+			{
+				expectedLevels.add(playerLevel + 1);
+			}else
+			{
+				int lower = playerLevel -1;
+				if(lower >= 0)
+				{
+					expectedLevels.add(lower);
+				}
+			}
+		}
+		return event;
+	}
+
+}

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/test/java/com/digitalchocolate/socailbetting/dao
+END
+BettingEventDaoTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/test/java/com/digitalchocolate/socailbetting/dao/BettingEventDaoTest.java
+END
+BaseDaoTestCase.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/test/java/com/digitalchocolate/socailbetting/dao/BaseDaoTestCase.java
+END

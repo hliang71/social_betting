@@ -1,0 +1,82 @@
+package com.openbet.socailbetting.webapp;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.openbet.socailbetting.utils.BetTypeEnum;
+import com.openbet.socailbetting.utils.LevelEnum;
+
+public class GenerateBetRequestBean extends BaseRequestDTO {
+	
+	private Boolean friendEnable;
+	private Integer playerLevel;
+	private BetTypeEnum betType;
+	private Double amount;
+	private List<LevelEnum> selectedLevel;
+	private List<String> neighbors;
+	private String currency;
+	
+	
+	public Boolean getFriendEnable() {
+		return friendEnable;
+	}
+	public void setFriendEnable(Boolean friendEnable) {
+		this.friendEnable = friendEnable;
+	}
+	
+	public Integer getPlayerLevel() {
+		return playerLevel;
+	}
+	public void setPlayerLevel(Integer playerLevel) {
+		this.playerLevel = playerLevel;
+	}
+	public BetTypeEnum getBetType() {
+		return betType;
+	}
+	public void setBetType(BetTypeEnum betType) {
+		this.betType = betType;
+	}
+	
+	
+	public Double getAmount() {
+		return amount;
+	}
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+	public List<LevelEnum> getSelectedLevel() {
+		return selectedLevel;
+	}
+	public void setSelectedLevel(List<LevelEnum> selectedLevel) {
+		this.selectedLevel = selectedLevel;
+	}
+	public List<String> getNeighbors() {
+		return neighbors;
+	}
+	public void setNeighbors(List<String> neighbors) {
+		this.neighbors = neighbors;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	@Override
+	public String getRequestContent() {
+		NumberFormat formatter = new DecimalFormat("#0.00"); 
+		 
+		String formatedAmt = formatter.format(amount);
+	
+		String amt = amount == null? "" : formatedAmt;
+		String bType = betType == null? "" : betType.value();
+		String cy = StringUtils.isBlank(currency)? "": currency;
+		String fe = friendEnable == null? "": friendEnable+"";
+		String pl = playerLevel == null? "" : playerLevel+"";
+		return new StringBuilder(amt).append(bType).append(cy).append(fe).append(this.getOpponentId()).append(this.getPlatformUserId()).append(pl).append(this.getProjectId()).toString();
+	}
+	
+}
