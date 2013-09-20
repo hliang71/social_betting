@@ -1,0 +1,64 @@
+package com.digitalchocolate.socailbetting.dao;
+
+import java.util.Date;
+import java.util.List;
+
+import com.digitalchocolate.socailbetting.model.Bet;
+import com.digitalchocolate.socailbetting.model.BetNotification;
+import com.digitalchocolate.socailbetting.model.BettingEvent;
+import com.digitalchocolate.socailbetting.model.SocialBettingTransaction;
+import com.digitalchocolate.socailbetting.model.rule.BaseRule;
+import com.digitalchocolate.socailbetting.model.rule.CallbackRule;
+import com.digitalchocolate.socailbetting.utils.BetTypeEnum;
+import com.digitalchocolate.socailbetting.utils.RuleNamesEnum;
+import com.digitalchocolate.socailbetting.utils.StatusEnum;
+
+
+public interface BaseRuleDao {
+	public BaseRule getRule(RuleNamesEnum name, Long projectId,
+			BetTypeEnum betType);
+
+	public List<BettingEvent> findBets(Long projectId, String opponentId,
+			Integer playerLevel, Integer expectedLevel, BetTypeEnum betType,
+			StatusEnum status, boolean friendEnable, Integer limit, Integer begin);
+
+	public String saveEvent(BettingEvent event);
+
+	public String updateEvent(BettingEvent event);
+
+	public String saveBet(Bet bet);
+
+	public Double getOddsByProjectTier(Long projectId, Integer tier);
+
+	public BettingEvent getEventById(String eventId);
+	public BettingEvent getEventByIds(Long projectId, String betType, String eventId);
+
+	public List<BettingEvent> getBetHistory(String opponentId, Long projectId, BetTypeEnum betType, String status, Date startDate, Date endDate, Integer begin, Integer limit);
+	
+	public String getKey(Long projectId);
+	
+	
+	public List<BettingEvent> getExpiredBets();
+	
+    public boolean release(Long jobId, String jobName);
+    
+    public boolean release(String jobName);
+	
+	public boolean lock(Long jobId, String jobName, int expiredInSeconds);
+	
+	public List<BetNotification> getNewNotifications(Long projectId, String betType, Integer batchSize, Integer begin);
+	
+	public List<CallbackRule> getAllCallbackRules(Integer begin, Integer limit);
+	
+	public SocialBettingTransaction getTransacitonById(String txId);
+	
+	public BettingEvent  findEventByTransactionId(Long projectId, String betType, String txId);
+	
+	public void delete(Object notif);
+	
+	public Long lookupPlatformIdByProjectId(Long projectId);
+	
+	public void updateBucket(CallbackRule rule, Integer totalBucks);
+	
+	public List<CallbackRule> getCallbackRulesByShardNum(Integer shardNum);
+}

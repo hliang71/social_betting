@@ -1,0 +1,33 @@
+#command can be reuse if the processing logic for the specific game/bet type is the same.
+#============ RTR rule executor ===============
+opponentParticipateBet_H2H=defaultAddOpponentTargetCommand
+maxTimeFindOpponent_H2H=defaultStartOpponentTimerCommand
+opponentIsFriend_H2H=defaultAddFriendCommand
+allowedRelativeLevels_H2H=defaultSetExpectedLevelCommand
+requiredNumOpponents_H2H=defaultValidateOpponentCommand
+takeOutPercentage_H2H=defaultCalculateOddsCommand
+minBetAmt_H2H=defaultValidateMinBetCommand
+maxBetAmt_H2H=defaultValidateMaxBetCommand
+maxAllowedCompletionTime_H2H=defaultStartCompletionTimerCommand
+settlementRule_H2H=defaultSettlementRuleExecutionCommand
+startComparisonRule_H2H=defaultStartEvaluationCommand
+callbackUrl_H2H=defaultCallbackCommand
+
+#=====common rule executors=====================
+START_EVALUATION_COMMAND_ALL_OPPONENTS_COMPLETED=defaultValidateAllOpponentsCompletedCommand
+SETTLEMENT_RULE_EXECUTION_COMMAND_LOWEST_VALUE_WIN=defaultLowestValueWinExecutionCommand
+SETTLEMENT_RULE_EXECUTION_COMMAND_HIGHEST_VALUE_WIN=defaultHighestValueWinExecutionCommand
+
+#=======crm short expire demo =======
+opponentParticipateBet_C2C=defaultAddOpponentTargetCommand
+maxTimeFindOpponent_C2C=defaultStartOpponentTimerCommand
+opponentIsFriend_C2C=defaultAddFriendCommand
+allowedRelativeLevels_C2C=defaultSetExpectedLevelCommand
+requiredNumOpponents_C2C=defaultValidateOpponentCommand
+takeOutPercentage_C2C=defaultCalculateOddsCommand
+minBetAmt_C2C=defaultValidateMinBetCommand
+maxBetAmt_C2C=defaultValidateMaxBetCommand
+maxAllowedCompletionTime_C2C=defaultStartCompletionTimerCommand
+settlementRule_C2C=defaultSettlementRuleExecutionCommand
+startComparisonRule_C2C=defaultStartEvaluationCommand
+callbackUrl_C2C=defaultCallbackCommand

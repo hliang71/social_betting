@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/engine
+END
+AbstractRuleEngine.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/engine/AbstractRuleEngine.java
+END
+DefaultRuleEngineImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/engine/DefaultRuleEngineImpl.java
+END
+SocialBettingDataConverter.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/engine/SocialBettingDataConverter.java
+END
+RuleEngine.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/engine/RuleEngine.java
+END

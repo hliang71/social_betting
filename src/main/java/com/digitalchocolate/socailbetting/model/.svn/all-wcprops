@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model
+END
+LogItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/LogItem.java
+END
+ProjectKeys.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/ProjectKeys.java
+END
+BettingTarget.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/BettingTarget.java
+END
+TierType.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/TierType.java
+END
+ProjectPlatformLookUp.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/ProjectPlatformLookUp.java
+END
+TransactionParticipantModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/TransactionParticipantModel.java
+END
+CustomizerType.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/CustomizerType.java
+END
+Friend.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/Friend.java
+END
+Bet.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/Bet.java
+END
+ContentType.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/ContentType.java
+END
+BettingOpponent.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/BettingOpponent.java
+END
+BetNotification.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/BetNotification.java
+END
+CurrencyRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/CurrencyRule.java
+END
+TransactionalModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/TransactionalModel.java
+END
+BettingLevel.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/BettingLevel.java
+END
+LogTarget.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/LogTarget.java
+END
+SocialBettingTransaction.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/SocialBettingTransaction.java
+END
+BettingEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/BettingEvent.java
+END
+DBLock.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/model/DBLock.java
+END

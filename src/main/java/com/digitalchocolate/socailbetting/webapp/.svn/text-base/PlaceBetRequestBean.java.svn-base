@@ -1,0 +1,61 @@
+package com.digitalchocolate.socailbetting.webapp;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
+import org.apache.commons.lang.StringUtils;
+
+public class PlaceBetRequestBean extends BaseRequestDTO{
+	private String eventId;
+	private String targetId;
+	private Double amount;
+	private Integer playerLevel;
+	private String currency;
+	
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+	
+	public String getTargetId() {
+		return targetId;
+	}
+	public void setTargetId(String targetId) {
+		this.targetId = targetId;
+	}
+	public Double getAmount() {
+		return amount;
+	}
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+	
+	
+	public Integer getPlayerLevel() {
+		return playerLevel;
+	}
+	public void setPlayerLevel(Integer playerLevel) {
+		this.playerLevel = playerLevel;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	@Override
+	public String getRequestContent() {
+		NumberFormat formatter = new DecimalFormat("#0.00"); 
+		 
+		String formatedAmt = formatter.format(amount);
+		String amt = amount == null? "" : formatedAmt;
+		String cy = StringUtils.isBlank(currency)? "" : currency;
+		String eId = StringUtils.isBlank(eventId)? "" : eventId;
+		String pl = (playerLevel == null) ? "" : playerLevel+"";
+		String tId = StringUtils.isBlank(targetId)? "" : targetId;
+		return new StringBuilder(amt).append(cy).append(eId).append(super.getOpponentId()).append(super.getPlatformUserId()).append(pl).append(super.getProjectId()).append(tId).toString();
+	}
+	
+}

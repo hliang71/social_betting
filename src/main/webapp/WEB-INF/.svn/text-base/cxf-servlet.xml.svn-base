@@ -1,0 +1,60 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+            http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+            http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" p:mapper-ref="jacksonMapper"/>
+	<bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper">
+	  <property name="serializationConfig.dateFormat">
+	    <bean class="java.text.SimpleDateFormat">
+	      <constructor-arg value="yyyy-MM-dd HH:mm:ss"/>
+	    </bean>
+	  </property>
+	  <property name="deserializationConfig.dateFormat">
+	    <bean class="java.text.SimpleDateFormat">
+	      <constructor-arg value="yyyy-MM-dd HH:mm:ss"/>
+	    </bean>
+	  </property>
+	</bean>
+   <!--   <jaxws:endpoint id="logService" implementor="#logManager" address="/LogService"/>-->
+    <!--   <jaxws:endpoint id="betService" implementor="#bettingService" address="/bettingService"/> -->
+    <!-- Add new endpoints for additional services you'd like to expose -->
+    
+    <jaxrs:server id="rs_service" address="/api">
+        <jaxrs:features>
+            <cxf:logging/>
+        </jaxrs:features>
+        <jaxrs:serviceBeans>
+           <!--  <ref bean="logManager"/>-->
+            <ref bean="bettingService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="cors-filter" />
+            <ref bean="validationExceptionMapper"/>
+            <ref bean="internalErrorExceptionMapper"/>
+            <ref bean="securityExceptionMapper"/>
+            <ref bean="sbWebApplicationExceptionMapper"/> 
+        </jaxrs:providers>
+        <jaxrs:extensionMappings>
+            <entry key="json" value="application/json"/>
+            <entry key="xml" value="application/xml"/>
+            <entry key="feed" value="application/atom+xml"/>
+        </jaxrs:extensionMappings>
+    </jaxrs:server>
+    <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/>
+    <bean id="validationExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingValidationExceptionMapper" />
+    <bean id="internalErrorExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingInternalExceptionMapper"/>
+    <bean id="sbWebApplicationExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingWebapplicationExceptionMapper">
+    </bean>
+    <bean id="securityExceptionMapper" class="com.digitalchocolate.socailbetting.exception.SocialBettingSecurityExceptionMapper"/>   
+</beans>

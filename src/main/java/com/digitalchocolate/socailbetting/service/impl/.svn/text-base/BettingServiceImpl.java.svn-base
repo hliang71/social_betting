@@ -1,0 +1,570 @@
+package com.digitalchocolate.socailbetting.service.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import com.digitalchocolate.socailbetting.dao.impl.SocialBettingRuleDao;
+import com.digitalchocolate.socailbetting.engine.RuleEngine;
+import com.digitalchocolate.socailbetting.engine.SocialBettingDataConverter;
+import com.digitalchocolate.socailbetting.exception.RuleEngineException;
+import com.digitalchocolate.socailbetting.exception.SocialBettingInternalException;
+import com.digitalchocolate.socailbetting.exception.SocialBettingSecurityException;
+import com.digitalchocolate.socailbetting.exception.SocialBettingValidationException;
+import com.digitalchocolate.socailbetting.model.Bet;
+import com.digitalchocolate.socailbetting.model.BetNotification;
+import com.digitalchocolate.socailbetting.model.BettingEvent;
+import com.digitalchocolate.socailbetting.model.BettingOpponent;
+import com.digitalchocolate.socailbetting.model.BettingTarget;
+import com.digitalchocolate.socailbetting.model.TransactionParticipantModel;
+import com.digitalchocolate.socailbetting.model.rule.CallbackRule;
+import com.digitalchocolate.socailbetting.model.rule.OddsRule;
+import com.digitalchocolate.socailbetting.model.rule.OpponentRule;
+import com.digitalchocolate.socailbetting.model.rule.SettlementRule;
+import com.digitalchocolate.socailbetting.service.BettingService;
+import com.digitalchocolate.socailbetting.utils.BetTypeEnum;
+import com.digitalchocolate.socailbetting.utils.EngineSupportedMethodEnum;
+import com.digitalchocolate.socailbetting.utils.ErrCode;
+import com.digitalchocolate.socailbetting.utils.RuleNamesEnum;
+import com.digitalchocolate.socailbetting.utils.SocialBettingCallTypeEnum;
+import com.digitalchocolate.socailbetting.utils.StatusEnum;
+import com.digitalchocolate.socailbetting.utils.TimerStatusEnum;
+import com.digitalchocolate.socailbetting.webapp.BaseRequestDTO;
+import com.digitalchocolate.socailbetting.webapp.BetHistoryDTO;
+import com.digitalchocolate.socailbetting.webapp.BetHistoryResult;
+import com.digitalchocolate.socailbetting.webapp.BetOpponentDTO;
+import com.digitalchocolate.socailbetting.webapp.BetSettlementDTO;
+import com.digitalchocolate.socailbetting.webapp.BettingEventsDTO;
+import com.digitalchocolate.socailbetting.webapp.BettingResultDTO;
+import com.digitalchocolate.socailbetting.webapp.GenerateBetRequestBean;
+import com.digitalchocolate.socailbetting.webapp.HistoryRequestBean;
+import com.digitalchocolate.socailbetting.webapp.PlaceBetRequestBean;
+import com.digitalchocolate.socailbetting.webapp.ReconcileRequestBean;
+import com.digitalchocolate.socailbetting.webapp.ResponseResultDTO;
+import com.digitalchocolate.socailbetting.webapp.RuleDTO;
+import com.digitalchocolate.socailbetting.webapp.RuleRequestBean;
+import com.digitalchocolate.socailbetting.webapp.SearchRequestBean;
+import com.digitalchocolate.socailbetting.webapp.UpdateBetRequestBean;
+import com.digitalchocolate.socailbetting.webapp.UpdateNotifyStatusRequestBean;
+
+
+@Service("bettingService")
+public class BettingServiceImpl implements BettingService{
+	private static final Logger log = Logger.getLogger(BettingServiceImpl.class);
+	private static final Integer LIMIT = 10;
+	
+	@Autowired
+    @Qualifier("ruleDao")
+    private SocialBettingRuleDao dao;
+	
+	
+	@Autowired
+    @Qualifier("crmClient")
+	private RestCRMClient crmClient;
+	
+	@Autowired
+    @Qualifier("ruleEngine")
+	private RuleEngine ruleEngine;
+
+	@Override
+	public RuleDTO getRules(RuleRequestBean request) {
+		log.info("IN GET RULES!!!!1");
+		Long projectId = request.getProjectId();
+		BetTypeEnum betType = request.getBetType();
+		if(betType == null)
+		{
+			throw new SocialBettingValidationException(ErrCode.INVALID_BET_TYPE, "failed to get rules bet type is invalid or missing.");
+		}
+	    if(log.isDebugEnabled()) log.debug("bettype is "+ betType.value());
+		OddsRule oddsRule = (OddsRule)dao.getRule(RuleNamesEnum.ODDS, projectId, betType);
+		OpponentRule opRule = (OpponentRule)dao.getRule(RuleNamesEnum.OPPONENT, projectId, betType);
+		SettlementRule settleRule = (SettlementRule)dao.getRule(RuleNamesEnum.SETTLEMENT, projectId, betType);
+		CallbackRule callbackRule = (CallbackRule)dao.getRule(RuleNamesEnum.CALLBACK, projectId, betType);
+		String userLevelUrl = callbackRule.getUserLevelUrl();
+		RuleDTO result = new RuleDTO();
+		try
+		{
+			BeanUtils.copyProperties(oddsRule, result);
+			BeanUtils.copyProperties(opRule, result);
+			BeanUtils.copyProperties(settleRule, result);
+		}catch(Exception e)
+		{
+			log.error("failed to copy bean properties to rule response.", e);
+			throw new SocialBettingInternalException("failed to copy bean properties to rule response.", e);
+		}
+		
+		String platformId = request.getPlatformUserId();
+		Integer tier = null;
+		if(StringUtils.isBlank(this.crmClient.getUserLevelUrl()))
+		{
+			this.crmClient.setUserLevelUrl(userLevelUrl);
+		}	
+		tier=crmClient.getTier(platformId, projectId, betType);
+		if(tier != null)
+		{
+			result.setPlayerLevel(tier);
+			result.setEligibleForBet(true);
+		}else
+		{
+			result.setEligibleForBet(false);
+		}
+		return result;
+	}
+
+	@Override
+	public BettingEventsDTO searchBets(SearchRequestBean request) {
+		log.info("IN SEARCH BET.");
+		String platformUserid = request.getPlatformUserId();
+		if(StringUtils.isBlank(platformUserid))
+		{
+			throw new SocialBettingSecurityException(ErrCode.SECURITY_PLATFORM_USER_ID_REQUIRED, "platform user id is required.");
+		}
+		Long projectId = request.getProjectId();
+		if(projectId == null)
+		{
+			throw new SocialBettingSecurityException(ErrCode.SECURITY_PROJECT_ID_REQUIRED, "project id is required");
+		}
+		BetTypeEnum betType = request.getBetType();
+		Integer playerLevel = this.crmClient.getTier(platformUserid, projectId, betType);
+		request.setPlayerLevel(playerLevel);
+		
+		boolean friendEnable = request.getFriendEnable();
+		String opponentId = request.getOpponentId();
+		Integer begin = request.getBegin();
+		if(begin == null)
+		{
+			begin = 0;
+		}
+		if(playerLevel == null)
+		{
+			throw new SocialBettingInternalException("invalid platform user id, this user is not in the targeted group.");
+		}
+		Integer limit = request.getLimit();
+		if(limit == null || limit == 0)
+		{
+			limit = LIMIT;
+		}
+		BettingEventsDTO result = new BettingEventsDTO();
+		List<BetOpponentDTO> higerTier = result.getHigher();
+		List<BetOpponentDTO> lowerTier = result.getLower();
+		List<BetOpponentDTO> similarTier = result.getSimilar();
+		
+		Integer higher = playerLevel + 1;
+		Integer same = playerLevel;
+		Integer lower = playerLevel -1;
+		List<BettingEvent> higherEvents = this.dao.findBets(projectId,opponentId, higher, playerLevel,betType, StatusEnum.WAIT_OPPONENT, friendEnable, limit, begin);
+		if(log.isDebugEnabled()) log.debug("higher:"+ higherEvents);
+		List<BettingEvent> sameLevelEvents = this.dao.findBets(projectId,opponentId, playerLevel,same, betType,StatusEnum.WAIT_OPPONENT, friendEnable, limit, begin);
+	    if(log.isDebugEnabled()) log.debug("same:"+sameLevelEvents);
+		List<BettingEvent> lowerEvents = this.dao.findBets(projectId,opponentId,lower, playerLevel, betType,StatusEnum.WAIT_OPPONENT, friendEnable, limit, begin);
+		if(log.isDebugEnabled()) log.debug("lower:"+ lowerEvents);
+		Map parameters = null;
+		try
+		{
+			parameters = PropertyUtils.describe(request);
+		}catch(Exception e)
+		{
+			if(log.isDebugEnabled()) log.debug("failed to get some of the fields.", e);
+		}
+		if(parameters == null)
+		{
+			throw new SocialBettingInternalException( "failed to parse the searchBet request.");
+
+		}
+		Map temp = null;
+		for(BettingEvent event : higherEvents)
+		{
+			try
+			{
+				temp = new HashMap(parameters);
+				event = this.ruleEngine.exeRule(event, EngineSupportedMethodEnum.SEARCH_BET, projectId, betType, temp);
+				BetOpponentDTO opDTO = SocialBettingDataConverter.convertToSearchResultDTO(event);
+				higerTier.add(opDTO);
+			}catch(Exception e)
+			{
+				log.error("higher event did not pass rule engine. ignored", e);
+			}
+		}
+		for(BettingEvent event : sameLevelEvents)
+		{
+			try
+			{
+				temp = new HashMap(parameters);
+				event = this.ruleEngine.exeRule(event, EngineSupportedMethodEnum.SEARCH_BET, projectId, betType, temp);
+				BetOpponentDTO opDTO = SocialBettingDataConverter.convertToSearchResultDTO(event);
+				similarTier.add(opDTO);
+			}catch(Exception e)
+			{
+				log.error("similar event did not pass rule engine. ignored", e);
+			}
+		}
+		for(BettingEvent event : lowerEvents)
+		{
+			try
+			{
+				temp = new HashMap(parameters);
+				event = this.ruleEngine.exeRule(event, EngineSupportedMethodEnum.SEARCH_BET, projectId, betType, temp);
+				BetOpponentDTO opDTO = SocialBettingDataConverter.convertToSearchResultDTO(event);
+				lowerTier.add(opDTO);
+			}catch(Exception e)
+			{
+				log.error("lower event did not pass rule engine. ignored", e);
+			}
+		}
+		result.setBetType(betType);
+		return result;
+	}
+
+	@Override
+	public BettingResultDTO generateBets(GenerateBetRequestBean request) {
+		BettingEvent event = new BettingEvent();
+		Long projectId =request.getProjectId();
+		String platformUserid = request.getPlatformUserId();
+		if(StringUtils.isBlank(platformUserid))
+		{
+			throw new SocialBettingSecurityException(ErrCode.SECURITY_PLATFORM_USER_ID_REQUIRED, "platform user id is required.");
+		}
+		if(projectId == null)
+		{
+			throw new SocialBettingSecurityException(ErrCode.SECURITY_PROJECT_ID_REQUIRED, "project id is required");
+		}
+		BetTypeEnum betType = request.getBetType();
+		Integer playerLevel = this.crmClient.getTier(platformUserid, projectId, betType);
+		request.setPlayerLevel(playerLevel);
+		
+		
+		String currency = request.getCurrency();
+		if(projectId == null)
+		{
+			throw new SocialBettingValidationException(ErrCode.SECURITY_PROJECT_ID_REQUIRED, "project is required.");
+		}
+		if(StringUtils.isBlank(currency))
+		{
+			throw new SocialBettingValidationException(ErrCode.MISSING_CURRENCY, "Failed to generate bet. currency is required.");
+		}
+		if(betType == null)
+		{
+			throw new SocialBettingValidationException(ErrCode.INVALID_BET_TYPE, "invalid bet type, bet type is required.");
+		}
+		event.setBetType(betType);
+		event.setCurrency(currency);
+		event.setProjectId(projectId);
+		Map parameters = null;
+		try
+		{
+			parameters = PropertyUtils.describe(request);
+		}catch(Exception e)
+		{
+			if(log.isDebugEnabled()) log.debug("failed to get some of the fields.", e);
+		}
+		if(parameters == null)
+		{
+			throw new SocialBettingInternalException( "failed to parse the generateBet request.");
+
+		}
+		event = this.ruleEngine.exeRule(event, EngineSupportedMethodEnum.GENERATE_BET, projectId, betType, parameters);
+		// save bet first to similar to atomic ops.
+		String eventId = event.getId();
+		if(StringUtils.isBlank(eventId))
+		{
+			throw new SocialBettingInternalException("event id is blank which should be set by the rule engine.");
+		}
+		/**Bet bet = new Bet();
+		String betId = UUID.randomUUID().toString();
+		bet.setId(betId);
+		bet.setOpponentId(request.getOpponentId());
+		bet.setTargetId(request.getOpponentId());
+		bet.setAmount(request.getAmount());
+		bet.setCurrency(request.getCurrency());
+		bet.setEventId(eventId);
+		
+	    dao.saveBet(bet);*/
+	    BettingOpponent opponent = event.getOpponents().get(0);
+	    //opponent.setBetId(betId);
+	    BetNotification bn = SocialBettingDataConverter.convertToNotification(request.getOpponentId(), event, platformUserid, currency, SocialBettingCallTypeEnum.CREATED);
+	    List<TransactionParticipantModel> notifs = new ArrayList<TransactionParticipantModel>();
+		notifs.add(bn);
+	    dao.atomicSave(notifs, event, true);
+		BettingResultDTO result = new BettingResultDTO();
+		result.setEventId(eventId);
+		result.setSuccess(true);
+		return result;
+	}
+
+	@Override
+	public BettingResultDTO placeBets(PlaceBetRequestBean request) {
+		Long projectId = request.getProjectId();
+		String platformUserid = request.getPlatformUserId();
+		if(StringUtils.isBlank(platformUserid))
+		{
+			throw new SocialBettingSecurityException(ErrCode.SECURITY_PLATFORM_USER_ID_REQUIRED, "platform user id is required.");
+		}
+		if(projectId == null)
+		{
+			throw new SocialBettingSecurityException(ErrCode.SECURITY_PROJECT_ID_REQUIRED, "project id is required");
+		}
+		String eventId = request.getEventId();
+		if(StringUtils.isBlank(eventId))
+		{
+			throw new SocialBettingValidationException(ErrCode.MISSING_EVENT_ID, "eventId is required for placing the bet.");
+			
+		}
+		BettingEvent event = dao.getEventById(eventId);
+		if(event == null)
+		{
+			throw new SocialBettingValidationException(ErrCode.EVENT_NOT_FOUND, "cannot place the bet, the betting event is not found!");
+		}
+		StatusEnum status = event.getStatus();
+		if(status == StatusEnum.EXPIRED )
+		{
+			throw new SocialBettingValidationException(ErrCode.MAX_TIME_FIND_OPPONENT_EXCEED, "The event you bet is expired.");
+		}
+
+		BetTypeEnum betType = event.getBetType();
+		Integer playerLevel = this.crmClient.getTier(platformUserid, projectId, betType);
+		request.setPlayerLevel(playerLevel);
+		Map parameters = null;
+		try
+		{
+			parameters = PropertyUtils.describe(request);
+		}catch(Exception e)
+		{
+			if(log.isDebugEnabled()) log.debug("failed to get some of the fields.", e);
+		}
+		if(parameters == null)
+		{
+			throw new SocialBettingInternalException( "failed to parse the placeBet request.");
+
+		}
+		
+		
+		event = this.ruleEngine.exeRule(event, EngineSupportedMethodEnum.PLACE_BET, projectId, betType, parameters);
+		/**Bet bet = new Bet();
+		String betId = UUID.randomUUID().toString();
+		bet.setId(betId);
+		bet.setOpponentId(request.getOpponentId());
+		bet.setTargetId(request.getOpponentId());
+		bet.setAmount(request.getAmount());
+		bet.setCurrency(request.getCurrency());
+		bet.setEventId(eventId);
+		
+	    dao.saveBet(bet);*/
+	    //TODO need to refactor the below code into post processer logic. to make this scalable.
+	    List<BettingOpponent> opps = event.getOpponents();
+	    BettingOpponent other = null;
+	    for(BettingOpponent opp : opps)
+	    {
+	    	if(!opp.getOpponentId().equals(request.getOpponentId()))
+	    	{
+	    		other = opp;
+	    	}
+	    }
+	    BetNotification matchedBn = SocialBettingDataConverter.convertToNotification(other.getOpponentId(), event, other.getPlatformUserId(), request.getCurrency(), SocialBettingCallTypeEnum.MATCHED);
+
+	    BetNotification placedBn = SocialBettingDataConverter.convertToNotification(request.getOpponentId(), event, platformUserid, request.getCurrency(), SocialBettingCallTypeEnum.PLACED);
+	    List<TransactionParticipantModel> notifs = new ArrayList<TransactionParticipantModel>();
+		notifs.add(matchedBn);
+		notifs.add(placedBn);
+	    dao.atomicSave(notifs, event, false);
+	    BettingResultDTO result = new BettingResultDTO();
+		result.setEventId(event.getId());
+		result.setSuccess(true);
+		return result;
+	}
+
+	@Override
+	public BetSettlementDTO updateBets(UpdateBetRequestBean request) {
+		String gameResult = request.getGameResult();
+		String eventId = request.getEventId();
+		Long projectId = request.getProjectId();
+		String opponentId = request.getOpponentId();
+		if(StringUtils.isBlank(opponentId))
+		{
+			throw new SocialBettingValidationException(ErrCode.MISSING_OPPONENT_ID, "cannot update bet, opponent id is missing");
+		}
+		if(StringUtils.isBlank(gameResult))
+		{
+			throw new SocialBettingValidationException(ErrCode.MISSING_GAME_RESULT, "the game result is required for update bet.");
+		}
+		
+		if(StringUtils.isBlank(eventId))
+		{
+			throw new SocialBettingValidationException(ErrCode.MISSING_EVENT_ID, "event id is required for update the bet.");
+		}
+		BettingEvent event = this.dao.getEventById(eventId);
+		if(event == null)
+		{
+			throw new SocialBettingValidationException(ErrCode.EVENT_NOT_FOUND, "can not update bet, the betting event is not found!");
+		}
+		if(event.getStatus() == StatusEnum.SETTLED)
+		{
+			throw new SocialBettingValidationException(ErrCode.EVENT_IS_SETTLED, "update bet is not allowed, the event is settled.");
+		}
+		String targetId = null; 
+		List<BettingOpponent> opponents = event.getOpponents();
+		boolean found = false;
+		for(BettingOpponent opponent: opponents)
+		{
+			String oppId = opponent.getOpponentId();
+			if(opponentId.trim().equals(oppId))
+			{
+				found = true;
+				targetId = opponent.getTargetId();
+			}
+		}
+		
+		if(!found)
+		{
+			throw new SocialBettingValidationException(ErrCode.OPPONENT_ID_EVENT_ID_NOT_MATCHED, new StringBuilder("cannot find opponent:").append(opponentId).append(" in event:").append(eventId).toString());
+		}
+		if(StringUtils.isBlank(targetId))
+		{
+			throw new SocialBettingInternalException("target id is not set. which should be set during place bet phase.do you passed the right player id?");
+		}
+		List<BettingTarget> targets = event.getTargets();
+		BetTypeEnum betType = event.getBetType();
+		BettingTarget target = null;
+		for(BettingTarget t: targets)
+		{
+			if(targetId.trim().equals(t.getTargetId()))
+			{
+				target = t;
+			}
+		}
+		if(target == null)
+		{
+			throw new SocialBettingInternalException("opponent and target are not matched. event id is:"+eventId);
+		}
+		String gResult = target.getGameResult();
+		if(StringUtils.isNotBlank(gResult) && gResult.equals(TimerStatusEnum.COMPLETION_TIMER_EXPIRED.value()))
+		{
+			throw new SocialBettingValidationException(ErrCode.MAX_TIME_TO_COMPLETE_EXCEED, "failed to update the bet with the game result, max time allowed to complete was passed");
+		}
+		target.setGameResult(gameResult);
+		Map parameters = null;
+		try
+		{
+			parameters = PropertyUtils.describe(request);
+		}catch(Exception e)
+		{
+			if(log.isDebugEnabled()) log.debug("failed to get some of the fields.", e);
+		}
+		if(parameters == null)
+		{
+			throw new SocialBettingInternalException( "failed to parse the updateBet request.");
+
+		}
+		event = this.ruleEngine.exeRule(event, EngineSupportedMethodEnum.UPDATE_BET, projectId, betType, parameters);
+		List<TransactionParticipantModel> notifications = null;
+		if(event.getStatus() == StatusEnum.SETTLED)
+        {
+			notifications = this.generateNotification(event, request, SocialBettingCallTypeEnum.SETTLED);
+			this.dao.atomicSave(notifications, event, false);
+        }else
+        {
+        	this.dao.updateEvent(event);
+        }
+        BetSettlementDTO result= SocialBettingDataConverter.converToSettlementDTO(event);
+		return result;
+	}
+
+	@Override
+	public BetHistoryResult getBetHistory(HistoryRequestBean request) {
+		String opponentId = request.getOpponentId();
+		Long projectId = request.getProjectId();
+		BetTypeEnum betType = request.getBetType();
+		int limit = request.getLimit() == null? 0: request.getLimit();
+		if(limit == 0 || limit > LIMIT)
+		{
+			limit = LIMIT;
+		}
+		int begin = request.getBegin() == null? 0 : request.getBegin();
+		Date startDate = request.getStartDate();
+		Date endDate = request.getEndDate();
+		if(request.getStatus() == null)
+		{
+			throw new SocialBettingValidationException(ErrCode.INVALID_HISTORY_STATUS,"invalid status, it should be one of the following:CREATED,MATCHED,LIVE,SETTLED or EXPIRED");
+		}
+		String status = request.getStatus().getStatusValue();
+		List<BetHistoryDTO> result = new ArrayList<BetHistoryDTO>();
+		List<BettingEvent> events = this.dao.getBetHistory(opponentId, projectId,betType, status, startDate, endDate, begin, limit);
+		if(events != null)
+		{
+			for(BettingEvent event : events)
+			{
+				BetHistoryDTO history = SocialBettingDataConverter.convertTOBetHistory(event, opponentId);
+				result.add(history);
+			}
+		}
+		BetHistoryResult history = new BetHistoryResult();
+		history.setSuccess(true);
+		history.setResult(result);
+		return history;
+	}
+	
+	public SocialBettingRuleDao getDao() {
+		return dao;
+	}
+
+	public void setDao(SocialBettingRuleDao dao) {
+		this.dao = dao;
+	}
+
+	public RestCRMClient getCrmClient() {
+		return crmClient;
+	}
+
+	public void setCrmClient(RestCRMClient crmClient) {
+		this.crmClient = crmClient;
+	}
+
+	public RuleEngine getRuleEngine() {
+		return ruleEngine;
+	}
+
+	public void setRuleEngine(RuleEngine ruleEngine) {
+		this.ruleEngine = ruleEngine;
+	}
+	
+	private List<TransactionParticipantModel> generateNotification(BettingEvent event, BaseRequestDTO request, SocialBettingCallTypeEnum callType)
+	{
+		List<BettingOpponent> opps = event.getOpponents();
+		String currency = event.getCurrency();
+		BettingOpponent other = null;
+		for(BettingOpponent opp : opps)
+		{
+			if(!opp.getOpponentId().equals(request.getOpponentId()))
+			{
+				other = opp;
+			}
+		}
+		BetNotification otherBn = null;
+		BetNotification thisBn = null;
+		if(callType == SocialBettingCallTypeEnum.PLACED)
+		{
+			otherBn = SocialBettingDataConverter.convertToNotification(other.getOpponentId(), event, other.getPlatformUserId(), currency, SocialBettingCallTypeEnum.MATCHED);
+			
+			thisBn = SocialBettingDataConverter.convertToNotification(request.getOpponentId(), event, request.getPlatformUserId(), currency, SocialBettingCallTypeEnum.PLACED);
+		}else if(callType == SocialBettingCallTypeEnum.SETTLED)
+		{
+			otherBn = SocialBettingDataConverter.convertToNotification(other.getOpponentId(), event, other.getPlatformUserId(), currency, SocialBettingCallTypeEnum.SETTLED);
+			
+			thisBn = SocialBettingDataConverter.convertToNotification(request.getOpponentId(), event, request.getPlatformUserId(), currency, SocialBettingCallTypeEnum.SETTLED);
+		}
+		List<TransactionParticipantModel> notifs = new ArrayList<TransactionParticipantModel>();
+		notifs.add(otherBn);
+		notifs.add(thisBn);
+		return notifs;
+	}
+}

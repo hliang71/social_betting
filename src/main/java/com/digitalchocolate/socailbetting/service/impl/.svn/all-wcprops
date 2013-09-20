@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/service/impl
+END
+BettingServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/service/impl/BettingServiceImpl.java
+END
+MongoDBLoggerServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 154
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/service/impl/MongoDBLoggerServiceImpl.java
+END
+RestCRMClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/service/impl/RestCRMClient.java
+END

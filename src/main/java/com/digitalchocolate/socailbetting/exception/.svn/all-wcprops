@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception
+END
+SocialBettingValidationException.java
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/SocialBettingValidationException.java
+END
+SocialBettingInternalException.java
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/SocialBettingInternalException.java
+END
+SocialBettingSecurityExceptionMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 163
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/SocialBettingSecurityExceptionMapper.java
+END
+SocialBettingValidationExceptionMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 164
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/SocialBettingValidationExceptionMapper.java
+END
+SocialBettingInternalExceptionMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 162
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/SocialBettingInternalExceptionMapper.java
+END
+ExceptionBody.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/ExceptionBody.java
+END
+RuleEngineException.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/RuleEngineException.java
+END
+SocialBettingWebapplicationExceptionMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/SocialBettingWebapplicationExceptionMapper.java
+END
+SocialBettingSecurityException.java
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/exception/SocialBettingSecurityException.java
+END

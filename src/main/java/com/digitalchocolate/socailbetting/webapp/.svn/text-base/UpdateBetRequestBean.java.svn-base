@@ -1,0 +1,27 @@
+package com.digitalchocolate.socailbetting.webapp;
+
+import org.apache.commons.lang.StringUtils;
+
+public class UpdateBetRequestBean extends BaseRequestDTO{
+	private String eventId;
+	private String gameResult;
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+	public String getGameResult() {
+		return gameResult;
+	}
+	public void setGameResult(String gameResult) {
+		this.gameResult = gameResult;
+	}
+	@Override
+	public String getRequestContent() {
+		String eId = StringUtils.isBlank(eventId)? "" : eventId;
+		String gr = StringUtils.isBlank(gameResult)? "" : gameResult;
+		return new StringBuilder(eId).append(gr).append(super.getOpponentId()).append(super.getPlatformUserId()).append(super.getProjectId()).toString();
+	}
+	
+}

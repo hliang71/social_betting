@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/resources
+END
+applicationContext-resources.xml
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/resources/applicationContext-resources.xml
+END
+userTier.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/resources/userTier.xsd
+END
+applicationContext-service.xml
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/resources/applicationContext-service.xml
+END
+spring-mongodb-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/resources/spring-mongodb-config.xml
+END
+applicationContext-dao.xml
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/resources/applicationContext-dao.xml
+END
+socialBettingQuartz.properties
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/resources/socialBettingQuartz.properties
+END
+ApplicationResources.properties
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/resources/ApplicationResources.properties
+END
+log4j.xml
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/resources/log4j.xml
+END

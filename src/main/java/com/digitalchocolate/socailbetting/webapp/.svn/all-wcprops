@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp
+END
+HistoryRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/HistoryRequestBean.java
+END
+BettingResultDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn-ext/social-betting/!svn/ver/5/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/BettingResultDTO.java
+END
+ReconcileRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn-ext/social-betting/!svn/ver/5/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/ReconcileRequestBean.java
+END
+BetHistoryDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/BetHistoryDTO.java
+END
+ResponseResultDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn-ext/social-betting/!svn/ver/5/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/ResponseResultDTO.java
+END
+SearchRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/SearchRequestBean.java
+END
+BetOpponentDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/BetOpponentDTO.java
+END
+RuleRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/RuleRequestBean.java
+END
+EventOpponentVO.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn-ext/social-betting/!svn/ver/5/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/EventOpponentVO.java
+END
+UpdateBetRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/UpdateBetRequestBean.java
+END
+RuleDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/RuleDTO.java
+END
+UpdateNotifyStatusRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/svn-ext/social-betting/!svn/ver/5/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/UpdateNotifyStatusRequestBean.java
+END
+PlaceBetRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/PlaceBetRequestBean.java
+END
+SecurityRequest.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn-ext/social-betting/!svn/ver/5/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/SecurityRequest.java
+END
+GenerateBetRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/GenerateBetRequestBean.java
+END
+OpponentExpireVO.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/OpponentExpireVO.java
+END
+BetSettlementDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/BetSettlementDTO.java
+END
+BettingEventsDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/BettingEventsDTO.java
+END
+BaseRequestDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn-ext/social-betting/!svn/ver/5/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/BaseRequestDTO.java
+END
+BetHistoryResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn-ext/social-betting/!svn/ver/29/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/BetHistoryResult.java
+END
+OpponentTierDTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/OpponentTierDTO.java
+END
+EventTargetVO.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn-ext/social-betting/!svn/ver/41/trunk/server/socialBetting/src/main/java/com/digitalchocolate/socailbetting/webapp/EventTargetVO.java
+END

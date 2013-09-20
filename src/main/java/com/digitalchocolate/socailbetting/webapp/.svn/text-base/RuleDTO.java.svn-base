@@ -1,0 +1,93 @@
+package com.digitalchocolate.socailbetting.webapp;
+
+import java.util.List;
+
+import com.digitalchocolate.socailbetting.utils.CurrencyEnum;
+import com.digitalchocolate.socailbetting.utils.LevelEnum;
+
+public class RuleDTO {
+	private Double suggestedBetAmt;
+	private Double maxBetAmt;
+	private Double minBetAmt;
+	private List<LevelEnum> allowedRelativeLevels;
+	private Boolean opponentIsFriend;
+	private Integer maxAllowedCompletionTime;
+	private CurrencyEnum currency;
+	private Boolean userAllowedTOSelectOpponentCriteria;
+	private Boolean eligibleForBet;
+	private Integer maxTimeFindOpponent;
+	private Integer playerLevel;
+	public Double getSuggestedBetAmt() {
+		return suggestedBetAmt;
+	}
+	public void setSuggestedBetAmt(Double suggestedBetAmt) {
+		this.suggestedBetAmt = suggestedBetAmt;
+	}
+	public Double getMaxBetAmt() {
+		return maxBetAmt;
+	}
+	public void setMaxBetAmt(Double maxBetAmt) {
+		this.maxBetAmt = maxBetAmt;
+	}
+	public Double getMinBetAmt() {
+		return minBetAmt;
+	}
+	public void setMinBetAmt(Double minBetAmt) {
+		this.minBetAmt = minBetAmt;
+	}
+	
+	public List<LevelEnum> getAllowedRelativeLevels() {
+		return allowedRelativeLevels;
+	}
+	public void setAllowedRelativeLevels(List<LevelEnum> allowedRelativeLevels) {
+		this.allowedRelativeLevels = allowedRelativeLevels;
+	}
+	
+	public Boolean getOpponentIsFriend() {
+		return opponentIsFriend;
+	}
+	public void setOpponentIsFriend(Boolean opponentIsFriend) {
+		this.opponentIsFriend = opponentIsFriend;
+	}
+	public Integer getMaxAllowedCompletionTime() {
+		return maxAllowedCompletionTime;
+	}
+	public void setMaxAllowedCompletionTime(Integer maxAllowedCompletionTime) {
+		this.maxAllowedCompletionTime = maxAllowedCompletionTime;
+	}
+	
+	public CurrencyEnum getCurrency() {
+		return currency;
+	}
+	public void setCurrency(CurrencyEnum currency) {
+		this.currency = currency;
+	}
+	
+	public Boolean getUserAllowedTOSelectOpponentCriteria() {
+		return userAllowedTOSelectOpponentCriteria;
+	}
+	public void setUserAllowedTOSelectOpponentCriteria(
+			Boolean userAllowedTOSelectOpponentCriteria) {
+		this.userAllowedTOSelectOpponentCriteria = userAllowedTOSelectOpponentCriteria;
+	}
+	public Boolean getEligibleForBet() {
+		return eligibleForBet;
+	}
+	public void setEligibleForBet(Boolean eligibleForBet) {
+		this.eligibleForBet = eligibleForBet;
+	}
+	
+	public Integer getMaxTimeFindOpponent() {
+		return maxTimeFindOpponent;
+	}
+	public void setMaxTimeFindOpponent(Integer maxTimeFindOpponent) {
+		this.maxTimeFindOpponent = maxTimeFindOpponent;
+	}
+	public Integer getPlayerLevel() {
+		return playerLevel;
+	}
+	public void setPlayerLevel(Integer playerLevel) {
+		this.playerLevel = playerLevel;
+	}
+	
+}

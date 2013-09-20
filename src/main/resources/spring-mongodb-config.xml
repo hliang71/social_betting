@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/data/mongo
+                http://www.springframework.org/schema/data/mongo/spring-mongo-1.1.xsd">
+
+    <!-- Default bean name is 'mongo' -->
+    <mongo:mongo host="${mongodb_host}" port="27017">
+        <!-- OPTIONAL: configure <mongo:options />10.5.5.236, 10.112.9.48 -->
+        <mongo:options connections-per-host="8500"
+                   threads-allowed-to-block-for-connection-multiplier="1300"
+                   connect-timeout="1000"
+                   max-wait-time="1500"
+                   auto-connect-retry="true"
+                   socket-keep-alive="true"
+                   socket-timeout="20500"
+                   slave-ok="false"
+                   write-number="1"
+                   write-timeout="0"
+                   write-fsync="false"/>
+    </mongo:mongo>
+
+    <mongo:db-factory id="mongoDbFactory" dbname="socialbetting" mongo-ref="mongo" username="${mongodb.username}"
+                  password="${mongodb.password}"/>
+    
+    <mongo:db-factory id="notificationDbFactory" dbname="notification" mongo-ref="mongo" username="${mongodb.username}"
+                  password="${mongodb.password}"/>
+                  
+    <mongo:db-factory id="eventDbFactory" dbname="event" mongo-ref="mongo" username="${mongodb.username}"
+                  password="${mongodb.password}"/>
+	
+	<mongo:mapping-converter id="mongoDbConverter">
+		<mongo:custom-converters>
+			<!--  <mongo:converter>
+				<bean class="com.digitalchocolate.socailbetting.utils.StringToLongConverter" />
+			</mongo:converter> -->
+			<mongo:converter>
+				<bean class="com.digitalchocolate.socailbetting.utils.LongToIntegerConverter" />
+			</mongo:converter>
+		</mongo:custom-converters>
+	</mongo:mapping-converter>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
+        <constructor-arg ref="mongoDbConverter" />
+    </bean>
+    
+    <bean id="notificationTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="notificationDbFactory"/>
+        <constructor-arg ref="mongoDbConverter" />
+    </bean>
+    <bean id="eventTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="eventDbFactory"/>
+        <constructor-arg ref="mongoDbConverter" />
+    </bean>
+</beans>

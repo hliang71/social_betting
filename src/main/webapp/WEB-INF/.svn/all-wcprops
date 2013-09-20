@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn-ext/social-betting/!svn/ver/29/trunk/server/socialBetting/src/main/webapp/WEB-INF
+END
+cxf-servlet.xml
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn-ext/social-betting/!svn/ver/29/trunk/server/socialBetting/src/main/webapp/WEB-INF/cxf-servlet.xml
+END
+applicationContext.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn-ext/social-betting/!svn/ver/22/trunk/server/socialBetting/src/main/webapp/WEB-INF/applicationContext.xml
+END
+dispatcher-servlet.xml
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/webapp/WEB-INF/dispatcher-servlet.xml
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/webapp/WEB-INF/index.html
+END
+web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn-ext/social-betting/!svn/ver/3/trunk/server/socialBetting/src/main/webapp/WEB-INF/web.xml
+END

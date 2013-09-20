@@ -1,0 +1,205 @@
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!-- START SNIPPET: example -->
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:amq="http://activemq.apache.org/schema/core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+
+    <!--
+        The <broker> element is used to configure the ActiveMQ broker.
+    -->
+    <amq:broker id="brokerSB" xmlns="http://activemq.apache.org/schema/core" brokerName="notification" dataDirectory="${catalina.base}/data" start="true" persistent="true" useShutdownHook="true">
+
+        <!--
+            For better performances use VM cursor and small memory limit.
+            For more information, see:
+
+            http://activemq.apache.org/message-cursors.html
+
+            Also, if your producer is "hanging", it's probably due to producer flow control.
+            For more information, see:
+            http://activemq.apache.org/producer-flow-control.html
+        -->
+		<destinations>
+      		<queue physicalName="${history.queue.name}" />
+      		<queue physicalName="${callback.queue.name}" />
+      		<queue physicalName="${event.queue.name}" />
+    	</destinations>
+        <amq:destinationPolicy>
+            <amq:policyMap>
+              <amq:policyEntries>
+                <amq:policyEntry topic=">" producerFlowControl="false">
+                    <!-- The constantPendingMessageLimitStrategy is used to prevent
+                         slow topic consumers to block producers and affect other consumers
+                         by limiting the number of messages that are retained
+                         For more information, see:
+
+                         http://activemq.apache.org/slow-consumer-handling.html
+
+                    -->
+                  <amq:pendingMessageLimitStrategy>
+                      <amq:constantPendingMessageLimitStrategy limit="1000"/>
+                  </amq:pendingMessageLimitStrategy>
+                </amq:policyEntry>
+                <amq:policyEntry queue=">" enableAudit="false" expireMessagesPeriod="259200" optimizedDispatch="true" lazyDispatch="true" producerFlowControl="false" memoryLimit="1 gb" maxPageSize="2000" maxBrowsePageSize="400">
+                  <!-- Use VM cursor for better latency
+                       For more information, see:
+
+                       http://activemq.apache.org/message-cursors.html
+                    fileQueueCursor -->
+                  <pendingQueuePolicy>
+                     <vmQueueCursor/>
+                  </pendingQueuePolicy> 
+                  
+                  <amq:deadLetterStrategy>
+		            <!--
+		              Use the prefix 'DLQ.' for the destination name, and make
+		              the DLQ a queue rather than a topic
+		            -->
+		          		<amq:individualDeadLetterStrategy queuePrefix="DLQ." useQueueForQueueMessages="true" enableAudit="false" processExpired="false" />
+		          </amq:deadLetterStrategy>
+		          <amq:pendingMessageLimitStrategy>
+		          		<amq:constantPendingMessageLimitStrategy limit="6000"/>
+		          </amq:pendingMessageLimitStrategy> 
+		          <!--  <amq:messageEvictionStrategy>
+                        <amq:oldestMessageEvictionStrategy evictExpiredMessagesHighWatermark="600" />
+                  </amq:messageEvictionStrategy> -->
+                </amq:policyEntry>
+              </amq:policyEntries>
+            </amq:policyMap>
+        </amq:destinationPolicy>
+
+
+        <!--
+            The managementContext is used to configure how ActiveMQ is exposed in
+            JMX. By default, ActiveMQ uses the MBean server that is started by
+            the JVM. For more information, see:
+
+            http://activemq.apache.org/jmx.html
+        -->
+        <amq:managementContext>
+            <managementContext createConnector="false"/>
+        </amq:managementContext>
+
+        <!--
+            Configure message persistence for the broker. The default persistence
+            mechanism is the KahaDB store (identified by the kahaDB tag).
+            For more information, see:
+
+            http://activemq.apache.org/persistence.html org.fusesource.leveldbjni.JniDBFactory org.iq80.leveldb.impl.Iq80DBFactory 
+        -->
+        <amq:persistenceAdapter>
+            <amq:kahaDB directory="${catalina.base}/data/kahadb"  cleanupInterval="5000"  checkForCorruptJournalFiles="true" ignoreMissingJournalfiles="true" enableIndexWriteAsync="true" checksumJournalFiles="true"/>
+        </amq:persistenceAdapter> 
+          
+      <!--  <amq:persistenceAdapter>
+		    <amq:levelDB directory="${catalina.base}/data/leveldb" logSize="107374182" indexFactory="org.fusesource.leveldbjni.JniDBFactory" flushDelay="0" verifyChecksums="true" paranoidChecks="false" indexCompression="none" sync="true">
+	        	<amq:locker>
+                	<amq:shared-file-locker lockAcquireSleepInterval="5000"/>
+                </amq:locker>
+	        </amq:levelDB>
+		</amq:persistenceAdapter> -->
+          <!--
+            The systemUsage controls the maximum amount of space the broker will
+            use before slowing down producers. For more information, see:
+            http://activemq.apache.org/producer-flow-control.html
+            If using ActiveMQ embedded - the following limits could safely be used:
+
+        <systemUsage>
+            <systemUsage>
+                <memoryUsage>
+                    <memoryUsage limit="20 mb"/>
+                </memoryUsage>
+                <storeUsage>
+                    <storeUsage limit="1 gb"/>
+                </storeUsage>
+                <tempUsage>
+                    <tempUsage limit="100 mb"/>
+                </tempUsage>
+            </systemUsage>
+        </systemUsage>
+        -->
+          <amq:systemUsage>
+            <amq:systemUsage sendFailIfNoSpaceAfterTimeout="3000">
+               <memoryUsage>
+                    <memoryUsage limit="1 gb"/>
+                </memoryUsage>
+                <amq:storeUsage>
+                    <amq:storeUsage limit="100 gb"/>
+                </amq:storeUsage>
+                <amq:tempUsage>
+                    <amq:tempUsage limit="1 gb"/>
+                </amq:tempUsage>       
+            </amq:systemUsage>
+        </amq:systemUsage>
+
+        <!--
+            The transport connectors expose ActiveMQ over a given protocol to
+            clients and other brokers. For more information, see:
+
+            http://activemq.apache.org/configuring-transports.html
+        -->
+        <amq:transportConnectors>
+            <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
+           
+            <transportConnector uri="tcp://localhost:7171?maximumConnections=500&amp;wireformat.maxFrameSize=104857600"/>
+            <!--  <transportConnector name="amqp" uri="amqp://localhost:5672?maximumConnections=10&amp;wireformat.maxFrameSize=104857600"/>-->
+        </amq:transportConnectors>
+
+        <!-- destroy the spring context on shutdown to stop jetty -->
+        <!--  <amq:shutdownHooks>
+            <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />
+        </amq:shutdownHooks> -->
+        <amq:shutdownHooks>
+        	<bean xmlns="http://www.springframework.org/schema/beans" id="brokerShutdown" class="com.digitalchocolate.socailbetting.service.impl.BrokerShutdownHookImpl" />
+        </amq:shutdownHooks>
+		<amq:plugins>
+        <amq:simpleAuthenticationPlugin>
+            <amq:users>
+                <amq:authenticationUser username="bettingAdmin" password="mybetAdmin" groups="admins" />
+                <amq:authenticationUser username="betting" password="mybet" groups="producers,consumers,,admins" />
+                <amq:authenticationUser username="bettingClient" password="mybetClient" groups="consumers" />
+            </amq:users>
+        </amq:simpleAuthenticationPlugin>
+        <amq:authorizationPlugin>
+            <amq:map>
+                <amq:authorizationMap>
+                    <amq:authorizationEntries>
+                        <amq:authorizationEntry queue=">" write="producers" read="consumers" admin="admins" />
+                        <amq:authorizationEntry topic=">" write="producers" read="consumers" admin="admins" />
+                    </amq:authorizationEntries>
+                </amq:authorizationMap>
+            </amq:map>
+        </amq:authorizationPlugin>
+         <!-- <amq:timeStampingBrokerPlugin zeroExpirationOverride="604800" ttlCeiling="604800" futureOnly="true"/> -->
+    	</amq:plugins>
+    
+    </amq:broker>
+
+    <!--
+        Enable web consoles, REST and Ajax APIs and demos
+
+        Take a look at ${ACTIVEMQ_HOME}/conf/jetty.xml for more details
+    
+    <import resource="classpath:jetty.xml"/> -->
+    
+</beans>
+<!-- END SNIPPET: example -->

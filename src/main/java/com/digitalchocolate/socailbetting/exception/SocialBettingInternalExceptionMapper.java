@@ -1,0 +1,29 @@
+package com.digitalchocolate.socailbetting.exception;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.ext.ExceptionMapper;
+
+import org.apache.log4j.Logger;
+
+import com.digitalchocolate.socailbetting.utils.ErrCode;
+
+public class SocialBettingInternalExceptionMapper implements ExceptionMapper<SocialBettingInternalException> {
+    private static final Logger log = Logger.getLogger(SocialBettingInternalExceptionMapper.class);
+    public Response toResponse(SocialBettingInternalException ex) {
+    	log.error("internal error:", ex);
+        String errCode = ErrCode.INTERNAL_SERVER_ERROR.value();
+        String errMsg = ex.getMessage();
+        ExceptionBody body = new ExceptionBody();
+        body.setSuccess(false);
+        body.setErrorCode(errCode);
+        body.setErrorMsg(errMsg);
+        ResponseBuilder rb = Response.status(Response.Status.OK);
+        rb.type(MediaType.APPLICATION_JSON_TYPE);
+        rb.entity(body);    
+        Response r = rb.build();
+        return r;
+    }
+}
+
